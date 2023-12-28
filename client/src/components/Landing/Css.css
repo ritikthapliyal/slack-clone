@@ -1,0 +1,81 @@
+.landing{
+    height: 100%;
+    width: 100%;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.slack{
+    display: flex;
+    align-items:center;
+    gap: 1rem;
+    cursor: pointer;
+}
+.slack img{
+    height: 4rem;
+    width: 4rem;
+}
+
+.enter-email{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    gap: .4rem;
+}
+.enter-email form{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+.enter-email form input{
+    height: 3rem;
+    width: 100%;
+    font-size: 1.2rem;
+    padding: .2rem .8rem;
+    outline: none;
+}
+.enter-email form input:focus{
+    /* box-shadow: ; */
+}
+.enter-email form button, .google-button{
+    height: 3rem;
+    width: 100%;
+    font-size: 1.2rem;
+    padding: .2rem .8rem;
+    background-color: #7f2a80;
+    color: white;
+    outline: none;
+    border-radius: .2rem;
+    transition: all 0.2s;
+}
+.enter-email form button:hover{
+    background-color: #642065;
+}
+
+.enter-email span{
+    margin: 2rem 0rem;
+    color: grey;
+}
+
+.google-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    color: black;
+    gap: 1rem;
+    width: 50%;
+    border: 1px solid black;
+}
+
+.google-button img{
+    width: 2rem;
+    height: 2rem;
+}
+
