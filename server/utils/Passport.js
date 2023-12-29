@@ -1,4 +1,5 @@
 const passport = require('passport')
+const User = require('../models/UserModel')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 
 
@@ -8,30 +9,45 @@ const credentials = {
     callbackURL: '/auth/google/callback'
 }
 
-const callback_function = (accessToken, refreshToken, profile, done) => {
-    // You can handle user creation and authentication here using the profile info
-    // For example:
-    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    //   return done(err, user);
-    // });
+const callback_function = async (accessToken, refreshToken, profile, done) => {
+    try{                                             
+        
+        let user = await User.findOne({googleId : profile.id})
+        
+        if(!user){
+            user = await User.create({
+                username: profile.displayName,
+                googleId: profile.id,
+                email: profile.emails[0].value
+            })
+        }
 
-    console.log(profile)
+        done(null,user)
 
-    return done(null, profile)
+    }catch(err){
+        console.log(err)
+        return done(err)
+    }
 }
 
 
 
-passport.serializeUser((user, done) => {
-    done(null, user)
-})
-  
-passport.deserializeUser((user, done) => {
-    done(null, user)
+passport.serializeUser((user,done)=>{
+    done(null,user.id)
 })
 
 
+passport.deserializeUser(async (userId,done)=>{ 
+    try{
+        const user = await User.findById(userId)
+        return done(null,user)
+    }catch(err){
+        return done(err)
+    }
+})
 
-passport.use(new GoogleStrategy(credentials, callback_function))
+
+const googleStrategy = new GoogleStrategy(credentials,callback_function)
+passport.use(googleStrategy)
 
 module.exports = passport

@@ -5,7 +5,7 @@ module.exports = async function connectAndStartServer(app){
     
     try{
         
-        await mongoose.connect('mongodb://127.0.0.1:27017/slack-clone')
+        await mongoose.connect(process.env.MONGO_CONNECTION_URL)
 
         app.listen(process.env.PORT || 5000, () => {
             console.log(`Server running on port 5000`)
