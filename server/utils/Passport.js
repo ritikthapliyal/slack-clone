@@ -30,7 +30,9 @@ const callback_function = async (accessToken, refreshToken, profile, done) => {
             const user = {
                 username: profile.displayName,
                 googleId: profile.id,
-                email: profile.emails[0].value
+                email: profile.emails[0].value,
+                workspaces : [],
+                workspace_emails : []
             }
 
             const update_params = {

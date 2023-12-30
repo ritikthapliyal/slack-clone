@@ -4,12 +4,25 @@ const express = require('express')
 const passport = require('passport')
 const connectAndStartServer = require('./server')
 var session = require('express-session')
+const cors = require('cors')
+
+
 var MongoDBStore = require('connect-mongodb-session')(session)
 
 
 const authRoutes = require('./routes/authRoutes')
 
 const app = express()
+
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+}
+  
+app.use(cors(corsOptions))
+
+
+
 
 var store = new MongoDBStore({
     uri: process.env.MONGO_CONNECTION_URL,
@@ -19,6 +32,7 @@ var store = new MongoDBStore({
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
+    name : 'slack-clone',
     cookie: {maxAge: 1000 * 60},
     store: store,
     resave: true,
