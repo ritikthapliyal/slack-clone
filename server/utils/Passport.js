@@ -1,7 +1,8 @@
 const passport = require('passport')
 const User = require('../models/UserModel')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
-
+const AWS = require('./aws')
+const dynamodb = new AWS.DynamoDB.DocumentClient()
 
 const credentials = {
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -10,21 +11,44 @@ const credentials = {
 }
 
 const callback_function = async (accessToken, refreshToken, profile, done) => {
+    
     try{                                             
         
-        let user = await User.findOne({googleId : profile.id})
+        // mongodb
+        // let user = await User.findOne({googleId : profile.id})
+
+    
+        const get_params = {
+            TableName: 'Users',
+            Key: { googleId : profile.id }
+        }
         
-        if(!user){
-            user = await User.create({
+        let {Item} = await dynamodb.get(get_params).promise()
+
+        if(!Item){
+
+            const user = {
                 username: profile.displayName,
                 googleId: profile.id,
                 email: profile.emails[0].value
-            })
+            }
+
+            const update_params = {
+                TableName: 'Users',
+                Item: user,
+            }
+
+            await dynamodb.put(update_params).promise()
+            done(null,user)
+
+        }
+        else{
+            done(null,Item)
         }
 
-        done(null,user)
 
-    }catch(err){
+    }
+    catch(err){
         console.log(err)
         return done(err)
     }
@@ -33,14 +57,26 @@ const callback_function = async (accessToken, refreshToken, profile, done) => {
 
 
 passport.serializeUser((user,done)=>{
-    done(null,user.id)
+    done(null,user.googleId)
 })
 
 
-passport.deserializeUser(async (userId,done)=>{ 
+
+//retrieves data using session object. {session.passport.user}
+passport.deserializeUser(async (googleId,done)=>{ 
     try{
-        const user = await User.findById(userId)
-        return done(null,user)
+        
+        // const user = await User.findById(userId)
+        
+        const get_params = {
+            TableName: 'Users',
+            Key: { googleId }
+        }
+        
+        let {Item} = await dynamodb.get(get_params).promise()
+
+        return done(null,Item)
+
     }catch(err){
         return done(err)
     }

@@ -1,4 +1,5 @@
 require('dotenv').config()
+const AWS = require('./utils/aws')
 const express = require('express')
 const passport = require('passport')
 const connectAndStartServer = require('./server')
@@ -25,6 +26,7 @@ app.use(session({
 }))
 
 
+
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -35,6 +37,32 @@ app.use('/auth',authRoutes)
 app.get('/dashboard',(req,res)=>{
     console.log(req)
     res.send("running...")
+})
+
+
+//
+app.post('/put_entry',async (req,res)=>{
+
+    const dynamodb = new AWS.DynamoDB.DocumentClient()
+
+    const params = {
+        TableName: 'Sessions',
+        Item: {
+          session_id: '123',
+          user_id: 'RITIK',
+          created_at: Date.now()
+        },
+    }
+    
+    try{
+        await dynamodb.put(params).promise()
+        res.send("data entered....")
+    }
+    catch(err){
+        console.log(err)
+        res.send("something went wrong....")
+    }
+
 })
 
 
