@@ -1,5 +1,5 @@
 .landing{
-    height: 100%;
+    height: 100vh;
     width: 100%;
     color: black;
     display: flex;
@@ -87,16 +87,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 1rem;
+    padding-top: 2rem;
     background-color: #f4ede480;
-
     width: 100%;
-    height: 30rem;
-
+    height: 36rem;
     position: relative;
+    gap: 1.6rem;
 }
 
-.workspace span{
+.or{
     position: absolute;
     background-color: white;
 
@@ -110,15 +109,225 @@
 
     bottom: -6%;
 
-    font-size: .8rem;
+    font-size: 1rem;
+    color: grey;
 }
 
 .workspace .slack p{
     font-weight: 400;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .workspace .slack img{
     height: 3rem;
     width: 3rem;
+}
+
+.email-info{
+    display: flex;
+    gap: 1rem;
+    background-color: white;
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+
+    font-size: .8rem;
+    margin-bottom: .2rem;
+}
+
+.email-info button{
+    background-color: inherit;
+    border: none;
+    color: grey;
+    border-bottom: 1px solid white;
+    transition: all 0.2s;
+}
+.email-info button:hover{
+    border-bottom: 1px solid grey;
+}
+
+
+
+
+
+
+.create-workspace{
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.create-workspace-left{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+}
+.create-workspace-left h1{
+    line-height: 2.2rem;
+}
+.create-workspace-left p{
+    line-height: 1.4rem;
+}
+.create-workspace-left button{
+    width: 100%;
+    color: white;
+    padding: .4rem 1rem;
+    background-color: #7f2a80;
+    border: none;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+}
+.create-workspace-left button:hover{
+    background-color: #642065;
+}
+.create-workspace-left span{
+    font-size: .8rem;
+    color: grey;
+    line-height: 1.2rem;
+}
+
+
+
+.create-workspace-right{
+    width: 40%;
+    display: grid;
+    row-gap: .2rem;
+    column-gap: .4rem;
+    grid-template-columns: 1fr 1fr;
+}
+.create-workspace-right img{
+    width: 12rem;
+    height: 12rem;
+    border-radius: 1rem;
+}
+.create-workspace-right img:first-child{
+    justify-self: end;
+    border-radius: 1rem;
+}
+.create-workspace-right img:last-child{
+    grid-column: 1/ span 3;
+    justify-self: center;
+    width: 17rem;
+    border-radius: .6rem;
+}
+
+
+
+
+
+/* //////////////////////////////////////////// */
+.createworkspace{
+    margin-top: 5rem;
+    margin-bottom: 3rem;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.createworkspace form, .card{
+    display: flex;
+    flex-direction: column;
+}
+
+.createworkspace h1{
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.close-createworkspace{
+    position: absolute;
+    background-color: inherit;
+    border: none;
+    right: 10;
+    top: 2%;
+}
+.close-createworkspace svg:hover{
+    color: rgb(243, 65, 42);
+}
+.close-createworkspace svg{
+    width: 2rem;
+    height: 2rem;
+    transition: all 0.2s;
+}
+
+.createworkspace form{
+    gap: 1rem;
+    overflow: hidden;
+    position: relative;
+    height: 18rem;  
+}
+.card{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+}
+.card_inner{
+    width: 80%;
+    height: 80%;
+    padding: 1rem;
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    /* box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.1); */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
+    margin-top: 0.4rem;
+}
+.card.hidden {
+    transform: translateX(-100%);
+} 
+.card.active {
+    transform: translateX(0);
+}
+
+.card span{
+    font-size: .8rem;
+    color: grey;
+    line-height: 1.2rem;
+}
+
+.card_inner input{
+    outline: none;
+    padding: 0.3rem .6rem;
+}
+.card_buttons{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+.card_buttons button{
+    width: fit-content;
+    color: white;
+    padding: .4rem 1rem;
+    background-color: #7f2a80;
+    border: none;
+    font-size: .8rem;
+    transition: all 0.2s;
+    border-radius: .2rem;
+}
+.card_buttons button:hover{
+    background-color: #642065;
+}
+
+.card_inner img{
+    width: 6rem;
+    height: 6rem;
+    border-radius: .2rem;
+}
+
+.card_inner textarea{
+    height: 50%;
+    outline: none;
+    resize: none;
+}
+.steps-count{
+    color: grey;
+    font-size: .8rem;
 }
