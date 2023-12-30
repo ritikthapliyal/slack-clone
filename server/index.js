@@ -11,17 +11,13 @@ var MongoDBStore = require('connect-mongodb-session')(session)
 
 
 const authRoutes = require('./routes/authRoutes')
+const userRoutes = require('./routes/userRoutes')
 
 const app = express()
+app.use(express.json())
 
-
-const corsOptions = {
-    origin: 'http://localhost:3000',
-}
-  
+const corsOptions = {origin: 'http://localhost:3000', credentials: true} 
 app.use(cors(corsOptions))
-
-
 
 
 var store = new MongoDBStore({
@@ -33,7 +29,7 @@ var store = new MongoDBStore({
 app.use(session({
     secret: process.env.SESSION_SECRET,
     name : 'slack-clone',
-    cookie: {maxAge: 1000 * 60},
+    cookie: {maxAge: 1000 * 60 * 5},
     store: store,
     resave: true,
     saveUninitialized: true
@@ -45,39 +41,9 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 
-app.use(express.json())
+
 app.use('/auth',authRoutes)
-
-app.get('/dashboard',(req,res)=>{
-    console.log(req)
-    res.send("running...")
-})
-
-
-//
-app.post('/put_entry',async (req,res)=>{
-
-    const dynamodb = new AWS.DynamoDB.DocumentClient()
-
-    const params = {
-        TableName: 'Sessions',
-        Item: {
-          session_id: '123',
-          user_id: 'RITIK',
-          created_at: Date.now()
-        },
-    }
-    
-    try{
-        await dynamodb.put(params).promise()
-        res.send("data entered....")
-    }
-    catch(err){
-        console.log(err)
-        res.send("something went wrong....")
-    }
-
-})
+app.use('/user',userRoutes)
 
 
 

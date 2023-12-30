@@ -16,7 +16,6 @@ const callback_function = async (accessToken, refreshToken, profile, done) => {
         
         // mongodb
         // let user = await User.findOne({googleId : profile.id})
-
     
         const get_params = {
             TableName: 'Users',
@@ -31,8 +30,8 @@ const callback_function = async (accessToken, refreshToken, profile, done) => {
                 username: profile.displayName,
                 googleId: profile.id,
                 email: profile.emails[0].value,
+                photo: profile.photos[0].value,
                 workspaces : [],
-                workspace_emails : []
             }
 
             const update_params = {
