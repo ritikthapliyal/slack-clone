@@ -56,7 +56,7 @@ function Workspace() {
                         </div>
                         <div className='email-info'>
                             <span>Confirmed as <b>{userData.email}</b></span>
-                            <button onClick={()=>{navigate('/')}}>change</button>
+                            <button onClick={()=>{navigate('/')}}>Change</button>
                         </div>
                         <div className='create-workspace'>
                             <div className='create-workspace-left'>
