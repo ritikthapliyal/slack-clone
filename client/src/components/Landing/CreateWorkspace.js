@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
 function CreateWorkspace() {
 
@@ -11,8 +12,8 @@ function CreateWorkspace() {
                                                 email : email || '', 
                                                 username: username || '',
                                                 photo : photo || '',
-                                                workspace_name : '',
-                                                invite_emails : []
+                                                workspace_name : 'ritik_workspace',
+                                                invite_emails : ['ritikn3w@gmail.com']
                                             })
     const [currentCard, setCurrentCard] = useState(0)
     const [newEmail,setNewEmail] = useState('')
@@ -34,7 +35,7 @@ function CreateWorkspace() {
 
         reader.onloadend = () => {
             const imageData = reader.result
-            setUserData({...userData, photo: imageData})
+            setUserData({...userData, photo: imageData, photo_file : file})
         }
 
         if (file) {
@@ -57,6 +58,34 @@ function CreateWorkspace() {
         setUserData({...userData,invite_emails: [newEmail, ...userData.invite_emails]})
         setNewEmail('')
     }
+
+
+
+
+    const handleSubmitButtonClick = async(e)=>{
+        
+        e.preventDefault()
+        
+        try{
+
+            console.log(userData)
+        
+            //get signedurl
+            const {data} = await axios.post('http://localhost:5000/user/get_upload_url',{contentType : userData.photo_file.type},{withCredentials: true})
+            
+            //use url to upload file
+            const response = await axios.put(data.signedUrl, userData.photo_file)
+
+            console.log(response)
+
+        }
+        catch(err){
+           console.log(err)
+        }
+    }
+
+
+
 
 
     return (
@@ -147,7 +176,7 @@ function CreateWorkspace() {
                     </div>
                     <div className='card_buttons'>
                         <button onClick={handleBackButtonClick}>Back</button>
-                        <button onClick={handleNextButtonClick}>Submit</button>
+                        <button onClick={handleSubmitButtonClick}>Submit</button>
                     </div>
                 </div>
             </form>

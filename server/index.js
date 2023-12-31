@@ -29,7 +29,7 @@ var store = new MongoDBStore({
 app.use(session({
     secret: process.env.SESSION_SECRET,
     name : 'slack-clone',
-    cookie: {maxAge: 1000 * 60 * 5},
+    cookie: {maxAge: 1000 * 60 * 10},
     store: store,
     resave: true,
     saveUninitialized: true
