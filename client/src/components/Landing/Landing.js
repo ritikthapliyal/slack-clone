@@ -19,7 +19,7 @@ function Landing() {
                     <button>Continue</button>
                 </form>
                 <span>------------ OR ------------</span>
-                <button className='google-button' onClick={()=>{window.location.href = 'http://localhost:5000/auth/google'}}>
+                <button className='google-button' onClick={()=>{window.location.href = `${process.env.REACT_APP_BASE_URL}/auth/google`}}>
                     <img src={google}></img>
                     Sign in with google
                 </button>

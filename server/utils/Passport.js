@@ -31,15 +31,15 @@ const callback_function = async (accessToken, refreshToken, profile, done) => {
                 googleId: profile.id,
                 email: profile.emails[0].value,
                 photo: profile.photos[0].value,
-                workspaces : [],
+                workspaces: []
             }
 
-            const update_params = {
+            const put_params = {
                 TableName: 'Users',
                 Item: user,
             }
 
-            await dynamodb.put(update_params).promise()
+            await dynamodb.put(put_params).promise()
             done(null,user)
 
         }

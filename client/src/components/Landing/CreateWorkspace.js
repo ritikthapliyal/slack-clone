@@ -1,12 +1,16 @@
 import React, {useState} from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { upoadProfileImageToS3 } from '../../apis/userApis'
+import { addNewWorkspace } from '../../apis/workspaceApis'
+import { useRequestData } from '../../hooks/useRequestData'
 
 function CreateWorkspace() {
 
     const navigate = useNavigate()
     const location = useLocation()
     const { email, username, photo  } = location.state || {}
+    
+    const {isLoading , fetchData } = useRequestData()
 
     const [userData, setUserData] = useState({
                                                 email : email || '', 
@@ -15,14 +19,18 @@ function CreateWorkspace() {
                                                 workspace_name : 'ritik_workspace',
                                                 invite_emails : ['ritikn3w@gmail.com']
                                             })
-    const [currentCard, setCurrentCard] = useState(0)
     const [newEmail,setNewEmail] = useState('')
-
+    
+    
+    
+    
+    const [currentCard, setCurrentCard] = useState(0)                                 
+    
     const handleNextButtonClick = (e)=>{
         e.preventDefault()
-        if(currentCard < 5){ setCurrentCard(currentCard + 1)}
+        if(currentCard < 4){ setCurrentCard(currentCard + 1)}
     } 
-    
+
     const handleBackButtonClick = (e)=>{
         e.preventDefault()
         if(currentCard >= 1){ setCurrentCard(currentCard - 1)}
@@ -60,38 +68,32 @@ function CreateWorkspace() {
     }
 
 
-
-
+    
     const handleSubmitButtonClick = async(e)=>{
         
         e.preventDefault()
         
-        try{
-
-            console.log(userData)
+        const s3UploadResponse = await fetchData(upoadProfileImageToS3,{
+                                                                        file_type:userData.photo_file.type, 
+                                                                        photo_file:userData.photo_file
+                                                                    })
         
-            //get signedurl
-            const {data} = await axios.post('http://localhost:5000/user/get_upload_url',{contentType : userData.photo_file.type},{withCredentials: true})
+        if(s3UploadResponse?.statusText === 'OK' && s3UploadResponse?.status === 200){
             
-            //use url to upload file
-            const response = await axios.put(data.signedUrl, userData.photo_file)
+            await fetchData(addNewWorkspace,{
+                                        workspace_name:userData.workspace_name, 
+                                        invite_emails:userData.invite_emails, 
+                                        photo : s3UploadResponse.fileName
+                                    })
 
-            console.log(response)
-
-        }
-        catch(err){
-           console.log(err)
+            navigate('/dashboard')
         }
     }
-
-
-
-
 
     return (
         <div className='createworkspace'>
             <h1>Let's create a workspace</h1>
-            <span className='steps-count'>Step {currentCard + 1} of 5</span>
+            <span className='steps-count'>Step {currentCard + 1} of 4</span>
             <button className='close-createworkspace' onClick={()=>{navigate('/workspace')}}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -117,17 +119,6 @@ function CreateWorkspace() {
                 <div className={`card ${currentCard === 1 ? 'active' : 'hidden'}`} key={1}>
                     <div className='card_inner'>
                         <lable>What's your name?</lable>
-                        <span>This will be the name of your Slack workspace - choose something that your team will recognise.</span>
-                        <input value={userData.email} onChange={(e)=>{setUserData({...userData, email:e.target.value})}}></input>
-                    </div>
-                    <div className='card_buttons'>
-                        <button onClick={handleBackButtonClick}>Back</button>
-                        <button onClick={handleNextButtonClick}>Next</button>
-                    </div>
-                </div>
-                <div className={`card ${currentCard === 2 ? 'active' : 'hidden'}`} key={2}>
-                    <div className='card_inner'>
-                        <lable>What's your name?</lable>
                         <span>Adding your name helps your teammates to recognise and connect with you more easily.</span>
                         <input value={userData.username} onChange={(e)=>{setUserData({...userData, username:e.target.value})}}></input>
                     </div>
@@ -136,7 +127,7 @@ function CreateWorkspace() {
                         <button onClick={handleNextButtonClick}>Next</button>
                     </div>
                 </div>
-                <div className={`card ${currentCard === 3 ? 'active' : 'hidden'}`} key={3}>
+                <div className={`card ${currentCard === 2 ? 'active' : 'hidden'}`} key={2}>
                     <div className='card_inner'>
                         <label>Your profile photo (optional)</label>
                         <span>Adding your profile photo helps your teammates to recognise and connect with you more easily.</span>
@@ -150,7 +141,7 @@ function CreateWorkspace() {
                         <button onClick={handleNextButtonClick}>Next</button>
                     </div>
                 </div>
-                <div className={`card ${currentCard === 4 ? 'active' : 'hidden'}`} key={4}>
+                <div className={`card ${currentCard === 3 ? 'active' : 'hidden'}`} key={3}>
                     <div className='card_inner'>
                         <lable>Who else is on the <b>{userData.workspace_name}</b> team?</lable>
                         <span>Add colleagues by email</span>
@@ -176,7 +167,13 @@ function CreateWorkspace() {
                     </div>
                     <div className='card_buttons'>
                         <button onClick={handleBackButtonClick}>Back</button>
-                        <button onClick={handleSubmitButtonClick}>Submit</button>
+
+                        {
+                            isLoading ?
+                                <button>Loading......</button>
+                            :
+                                <button onClick={handleSubmitButtonClick}>Submit</button>
+                        }
                     </div>
                 </div>
             </form>

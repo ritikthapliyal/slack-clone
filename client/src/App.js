@@ -1,9 +1,10 @@
 import './App.css'
-import Workspace from './components/Landing/Workspace';
+import Workspace from './components/Landing/Workspace'
 import Landing from './components/Landing/Landing'
-import CreateWorkspace from './components/Landing/CreateWorkspace';
+import CreateWorkspace from './components/Landing/CreateWorkspace'
+import Dashboard from './components/Dashboard/Dashboard'
 
-import { createBrowserRouter, RouterProvider } from'react-router-dom';
+import { createBrowserRouter, RouterProvider } from'react-router-dom'
 const router = createBrowserRouter([
     {
       path: '/',
@@ -19,10 +20,10 @@ const router = createBrowserRouter([
           },
         ],
       },
-    // {
-    //   path: '/about',
-    //   element: <About />,
-    // },
+    {
+      path: '/dashboard',
+      element: <Dashboard />,
+    },
 ])
 
 
