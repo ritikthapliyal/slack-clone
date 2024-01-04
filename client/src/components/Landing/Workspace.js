@@ -10,6 +10,7 @@ import workspace_1 from '../../images/workspace_1.png'
 import workspace_2 from '../../images/workspace_2.png'
 import workspace_3 from '../../images/workspace_3.png'
 import { useRequestData } from '../../hooks/useRequestData'
+import ShowWorkspace from './ShowWorkspace'
 
 
 function Workspace() {
@@ -54,8 +55,11 @@ function Workspace() {
                                     <img src={workspace_3}></img>
                                 </div>
                             </div>
-                            <span className='or'>OR</span>
+                            { data.workspaces.length > 0 && <span className='or'>OR</span>}
                         </div>
+                        {
+                            data.workspaces.length > 0 && <ShowWorkspace data={data}/>
+                        }
                         <Outlet />
                     </Fragment>
             }

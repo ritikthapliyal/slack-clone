@@ -35,6 +35,7 @@ router.post('/', async (req,res)=>{
                 }
             }
 
+            console.log(update_params)
             await DynamoDB.update(update_params).promise()
 
             const put_params = {
