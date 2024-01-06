@@ -6,7 +6,7 @@ const routes = {
     },
     'user': {
         'info': '/',
-        'profile_image_upload' : '/profile/image/upload'
+        'image_upload' : '/image/upload'
     },
     'workspace': {
         'add_new_workspace': '/',

@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const AWS = require('../utils/aws')
 const DynamoDB = new AWS.DynamoDB.DocumentClient()
+const lambda = new AWS.Lambda()
+
 
 // router.get('/', authenticate , (req,res)=>{
 //    setTimeout(() => {
@@ -10,39 +12,51 @@ const DynamoDB = new AWS.DynamoDB.DocumentClient()
 // })
 
 
-
 router.post('/', async (req,res)=>{
-        
-        const {workspace_name, invite_emails, photo} = req.body
+
+        const {workspace_name, invite_emails, photo, username} = req.body
         
         const new_workspace = {
             name : workspace_name,
+            workspace_photo : `${process.env.S3_URL}${photo}`,
             id : `${req.user.googleId}_${Date.now()}`,
             invite_emails
         }
-        
+
         const updated_workspaces = [...req.user.workspaces, new_workspace]
 
         try {
 
+            // const params = {
+            //     FunctionName: 'slack-clone-microservice',
+            //     InvocationType: 'Event', // or 'Event' for asynchronous invocation
+            //     Payload: JSON.stringify({
+            //         task : "send_email",
+            //         user_details : {
+            //             username : username || req.user.username,
+            //             workspace_name : new_workspace.workspace_name
+            //         },
+            //         invite_emails : new_workspace.invite_emails
+            //     })
+            // }
+
+            // await lambda.invoke(params).promise()
+
             const update_params = {
                 TableName: 'Users',
                 Key: { googleId: req.user.googleId},
-                UpdateExpression: 'SET workspaces = :updated_workspaces , photo=:photo',
-                ExpressionAttributeValues: {
-                    ':updated_workspaces': updated_workspaces,
-                    ':photo': `${process.env.S3_URL}${photo}`,
-                }
+                UpdateExpression: 'SET workspaces = :updated_workspaces, username = :username',
+                ExpressionAttributeValues: { ':updated_workspaces': updated_workspaces, ':username': username}
             }
 
-            console.log(update_params)
             await DynamoDB.update(update_params).promise()
 
             const put_params = {
                 TableName: 'Workspaces',
                 Item: {
                     id: new_workspace.id,
-                    workspace_name : new_workspace.name
+                    workspace_name : new_workspace.name,
+                    workspace_photo : new_workspace.workspace_photo
                 }
             }
 
@@ -51,6 +65,7 @@ router.post('/', async (req,res)=>{
 
         } catch (error) {
             console.log('Error : ', error)
+            res.status(500).json({ success: true, message : "successful", status: 500 })
         }
 })
 

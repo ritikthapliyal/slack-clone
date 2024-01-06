@@ -13,10 +13,10 @@ export async function fetchUserData() {
 }
 
 
-export async function upoadProfileImageToS3({file_type, photo_file}) {
+export async function uploadImageToS3({file_type, photo_file}) {
     try {
         
-        const url = getUrl('user', 'profile_image_upload')
+        const url = getUrl('user', 'image_upload')
         const { data } = await axios.get(url,{ params: { contentType : file_type }, withCredentials: true })
         const {signedUrl, fileName} = data.data
 

@@ -1,5 +1,5 @@
 import Css from './Css.css'
-import React, { useEffect, Fragment } from 'react'
+import React, { useEffect, useState, Fragment } from 'react'
 import { fetchUserData } from '../../apis/userApis'
 import slack from '../../images/slack.png'
 import Error from '../Common/Error'
@@ -57,10 +57,11 @@ function Workspace() {
                             </div>
                             { data.workspaces.length > 0 && <span className='or'>OR</span>}
                         </div>
-                        {
-                            data.workspaces.length > 0 && <ShowWorkspace data={data}/>
-                        }
                         <Outlet />
+                        {
+                            data.workspaces.length > 0 ? <ShowWorkspace data={data}/> : 
+                            <p className='no-workspace'>No Workspace created.</p>
+                        }
                     </Fragment>
             }
         </Fragment>

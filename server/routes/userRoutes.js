@@ -13,7 +13,7 @@ router.get('/', authenticate , (req,res)=>{
 
 
 
-router.get('/profile/image/upload', authenticate , async (req,res)=>{
+router.get('/image/upload', authenticate , async (req,res)=>{
         
         const contentType = req.query?.contentType || 'image/jpeg'
 

@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { upoadProfileImageToS3 } from '../../apis/userApis'
+import { uploadImageToS3 } from '../../apis/userApis'
 import { addNewWorkspace } from '../../apis/workspaceApis'
 import { useRequestData } from '../../hooks/useRequestData'
 
@@ -8,15 +8,15 @@ function CreateWorkspace() {
 
     const navigate = useNavigate()
     const location = useLocation()
-    const { email, username, photo  } = location.state || {}
+    const { email, username } = location.state || {}
     
     const {isLoading , fetchData } = useRequestData()
 
     const [userData, setUserData] = useState({
                                                 email : email || '', 
                                                 username: username || '',
-                                                photo : photo || '',
-                                                workspace_name : 'ritik_workspace',
+                                                photo : process.env.REACT_APP_DEFAULT_IMAGE,
+                                                workspace_name : 'Sunfox Technologies',
                                                 invite_emails : ['ritikn3w@gmail.com']
                                             })
     const [newEmail,setNewEmail] = useState('')
@@ -73,21 +73,33 @@ function CreateWorkspace() {
         
         e.preventDefault()
         
-        const s3UploadResponse = await fetchData(upoadProfileImageToS3,{
-                                                                        file_type:userData.photo_file.type, 
-                                                                        photo_file:userData.photo_file
-                                                                    })
+        let s3UploadResponse
         
-        if(s3UploadResponse?.statusText === 'OK' && s3UploadResponse?.status === 200){
-            
-            await fetchData(addNewWorkspace,{
-                                        workspace_name:userData.workspace_name, 
-                                        invite_emails:userData.invite_emails, 
-                                        photo : s3UploadResponse.fileName
-                                    })
-
-            navigate('/dashboard')
+        if(userData?.photo_file){
+            s3UploadResponse = await fetchData(uploadImageToS3,{
+                                                file_type:userData.photo_file.type, 
+                                                photo_file:userData.photo_file
+                                            })
         }
+
+        let payload = {
+            workspace_name:userData.workspace_name, 
+            invite_emails:userData.invite_emails, 
+            username : userData.username
+        }
+
+        if(userData?.photo_file && s3UploadResponse?.statusText === 'OK' && s3UploadResponse?.status === 200){
+            payload.photo = s3UploadResponse.fileName 
+        }
+        else{
+            payload.photo = 'default.png'
+        }
+
+        const response = await fetchData(addNewWorkspace,payload)
+        
+        console.log(response)
+        navigate('/workspace')
+
     }
 
     return (
@@ -129,8 +141,8 @@ function CreateWorkspace() {
                 </div>
                 <div className={`card ${currentCard === 2 ? 'active' : 'hidden'}`} key={2}>
                     <div className='card_inner'>
-                        <label>Your profile photo (optional)</label>
-                        <span>Adding your profile photo helps your teammates to recognise and connect with you more easily.</span>
+                        <label>Your workspace photo (optional)</label>
+                        <span>Adding your workspace photo helps your teammates to recognise and connect with you more easily.</span>
                         <div style={{display:'flex', gap:"1rem"}}>
                             <img src={userData.photo}></img>
                             <input type="file" accept="image/*" onChange={handleProfileUpload} />

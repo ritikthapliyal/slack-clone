@@ -7,23 +7,25 @@ function ShowWorkspace({data}) {
 
     return (
         <div className='show-workspaces'>
-
             <h2>Welcome back</h2>
-            <div>
+            <div className='workspace-div'>
                 <span>Workspaces for {data.email}</span>
                 <Fragment>
                     {
                         data.workspaces.map((workspace)=>{
-                            return <div>
-                                    <img src={workspace.photo}></img>
-                                    <div>
-                                        <p>{workspace.name}</p>
-                                        {
-                                            workspace.invite_emails.map(email=>{
-                                                return <p>{email}</p>
-                                            })
-                                        }
+                            return <div className='workspace-box'>
+                                    <div className='workspace-info'>
+                                        <img src={workspace.workspace_photo}></img>
+                                        <div>
+                                            <h4>{workspace.name}</h4>
+                                            {
+                                                workspace.invite_emails.map(email=>{
+                                                    return <p>{email}</p>
+                                                })
+                                            }
+                                        </div>
                                     </div>
+                                    <button>Open Workspace</button>
                             </div>
                         })
                     }

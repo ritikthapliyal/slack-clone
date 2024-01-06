@@ -217,10 +217,10 @@
 
 
 /* //////////////////////////////////////////// */
-.createworkspace, .show-workspaces{
+.createworkspace{
+    width: 35%;
     margin-top: 5rem;
     margin-bottom: 3rem;
-    width: 35%;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -315,7 +315,7 @@
     background-color: #642065;
 }
 
-.card_inner img{
+.card_inner img, .workspace-box img{
     width: 6rem;
     height: 6rem;
     border-radius: .2rem;
@@ -409,10 +409,67 @@
 
 
 
-
+.show-workspaces{
+    width: 100%;
+    margin: 3rem 0rem;
+    margin-bottom: 0rem;
+    padding: 3rem 0rem;
+    padding-bottom: 5rem;
+    display: flex;
+    flex-direction: column;
+    background-color: #642065;
+    align-items: center;
+}
+.show-workspaces h2{
+    font-size: 2rem;
+    width: 60%;
+    color: white;
+}
 .show-create-workspace{
- width: 100%;
- display: flex;
- align-items: center;
- justify-content: space-evenly;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.workspace-div{
+    width: 60%;
+    border: .4rem solid #fecaffa3;
+    border-radius: .2rem;
+}
+.workspace-div span{
+    background-color: #ecdeec;
+    width: 100%;
+    display: flex;
+    padding: 1.6rem 1rem;
+    font-size: 1rem;
+}
+.workspace-box{
+    background-color: #642065;
+    justify-content: space-between;
+    background-color: white;
+    padding: 1rem;
+    display: flex;
+    gap: 2rem;
+}
+.workspace-box button{
+    display: flex;
+    align-items: center;
+    align-self: center;
+    padding: 1rem .8rem;
+    background-color: #7f2a80;
+    color: white;
+    border: none;
+    border-radius: .2rem;
+    font-size: 1rem;
+}
+
+.no-workspace{
+    width: 100%; 
+    color: #9a9797;
+    margin: 3rem;
+    text-align: center
+}
+.workspace-info{
+    display: flex;
+    gap: 1rem;
 }

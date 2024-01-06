@@ -18,6 +18,10 @@ const router = createBrowserRouter([
             path: 'create',
             element: <CreateWorkspace />,
           },
+        //   {
+        //     path: 'confirm/',
+        //     element: <CreateWorkspace />,
+        //   },
         ],
       },
     {
