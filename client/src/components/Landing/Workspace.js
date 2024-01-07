@@ -1,5 +1,5 @@
 import Css from './Css.css'
-import React, { useEffect, useState, Fragment } from 'react'
+import React, { useEffect, useContext, Fragment } from 'react'
 import { fetchUserData } from '../../apis/userApis'
 import slack from '../../images/slack.png'
 import Error from '../Common/Error'
@@ -9,14 +9,15 @@ import {useNavigate, Outlet} from 'react-router-dom'
 import workspace_1 from '../../images/workspace_1.png'
 import workspace_2 from '../../images/workspace_2.png'
 import workspace_3 from '../../images/workspace_3.png'
-import { useRequestData } from '../../hooks/useRequestData'
+// import { useRequestData } from '../../hooks/useRequestData'
 import ShowWorkspace from './ShowWorkspace'
+import UserDataContext from '../../context/UserDataContext'
 
 
 function Workspace() {
 
     const navigate = useNavigate()
-    const { data, isLoading, isError, errorData, fetchData } = useRequestData()
+    const { data, isLoading, isError, errorData, fetchData } = useContext(UserDataContext)
 
     useEffect(()=>{
         fetchData(fetchUserData)

@@ -5,10 +5,9 @@ const passport = require('../utils/Passport')
 router.get('/google',passport.authenticate('google', { scope: ['profile', 'email'] }))
   
 router.get('/google/callback',passport.authenticate('google', {
-        successRedirect: 'http://localhost:3000/workspace',
+        successRedirect: process.env.CLIENT_URL,
         failureRedirect: '/login' 
     })
 )
-
 
 module.exports = router

@@ -3,6 +3,7 @@ import Workspace from './components/Landing/Workspace'
 import Landing from './components/Landing/Landing'
 import CreateWorkspace from './components/Landing/CreateWorkspace'
 import Dashboard from './components/Dashboard/Dashboard'
+import { UserDataProvider } from './context/UserDataContext'
 
 import { createBrowserRouter, RouterProvider } from'react-router-dom'
 const router = createBrowserRouter([
@@ -12,11 +13,13 @@ const router = createBrowserRouter([
     },
     {
         path: '/workspace',
-        element: <Workspace />,
+        element: <UserDataProvider>
+                    <Workspace/>
+                 </UserDataProvider>,
         children: [
           {
             path: 'create',
-            element: <CreateWorkspace />,
+            element: <CreateWorkspace/>,
           },
         //   {
         //     path: 'confirm/',
@@ -26,7 +29,7 @@ const router = createBrowserRouter([
       },
     {
       path: '/dashboard',
-      element: <Dashboard />,
+      element: <Dashboard/>,
     },
 ])
 

@@ -1,5 +1,4 @@
 const passport = require('passport')
-const User = require('../models/UserModel')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const AWS = require('./aws')
 const dynamodb = new AWS.DynamoDB.DocumentClient()

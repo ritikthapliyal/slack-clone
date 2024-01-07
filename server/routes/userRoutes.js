@@ -8,7 +8,7 @@ const s3 = new AWS.S3()
 router.get('/', authenticate , (req,res)=>{
    setTimeout(() => {
         res.status(200).json({ success: true, data: req.user, status: 200 });
-    }, 2000)
+    }, 1000)
 })
 
 

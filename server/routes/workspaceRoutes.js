@@ -20,7 +20,6 @@ router.post('/', async (req,res)=>{
             name : workspace_name,
             workspace_photo : `${process.env.S3_URL}${photo}`,
             id : `${req.user.googleId}_${Date.now()}`,
-            invite_emails
         }
 
         const updated_workspaces = [...req.user.workspaces, new_workspace]
@@ -56,7 +55,8 @@ router.post('/', async (req,res)=>{
                 Item: {
                     id: new_workspace.id,
                     workspace_name : new_workspace.name,
-                    workspace_photo : new_workspace.workspace_photo
+                    workspace_photo : new_workspace.workspace_photo,
+                    workspace_admin : req.user.googleId
                 }
             }
 

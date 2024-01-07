@@ -417,7 +417,7 @@
     padding-bottom: 5rem;
     display: flex;
     flex-direction: column;
-    background-color: #642065;
+    background-color: #6d1f6feb;
     align-items: center;
 }
 .show-workspaces h2{
@@ -435,6 +435,7 @@
     width: 60%;
     border: .4rem solid #fecaffa3;
     border-radius: .2rem;
+    background-color: lightgray;
 }
 .workspace-div span{
     background-color: #ecdeec;
@@ -450,6 +451,17 @@
     padding: 1rem;
     display: flex;
     gap: 2rem;
+    margin: .2rem 0rem;
+    transition: all .2s;
+}
+.workspace-box:hover{
+    background-color: #fef7f2f0;
+}
+.workspace-box.workspace-box-first{
+    margin-top: 0px;
+}
+.workspace-box.workspace-box-last{
+    margin-bottom: 0px;
 }
 .workspace-box button{
     display: flex;

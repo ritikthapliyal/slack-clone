@@ -1,14 +1,16 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { uploadImageToS3 } from '../../apis/userApis'
+import { fetchUserData, uploadImageToS3 } from '../../apis/userApis'
 import { addNewWorkspace } from '../../apis/workspaceApis'
 import { useRequestData } from '../../hooks/useRequestData'
+import UserDataContext from '../../context/UserDataContext'
 
 function CreateWorkspace() {
 
     const navigate = useNavigate()
     const location = useLocation()
     const { email, username } = location.state || {}
+    const { fetchData: contextFetchData } = useContext(UserDataContext);
     
     const {isLoading , fetchData } = useRequestData()
 
@@ -17,7 +19,7 @@ function CreateWorkspace() {
                                                 username: username || '',
                                                 photo : process.env.REACT_APP_DEFAULT_IMAGE,
                                                 workspace_name : 'Sunfox Technologies',
-                                                invite_emails : ['ritikn3w@gmail.com']
+                                                invite_emails : ['ritikthapliyal123@gmail.com']
                                             })
     const [newEmail,setNewEmail] = useState('')
     
@@ -98,6 +100,7 @@ function CreateWorkspace() {
         const response = await fetchData(addNewWorkspace,payload)
         
         console.log(response)
+        contextFetchData(fetchUserData)
         navigate('/workspace')
 
     }
