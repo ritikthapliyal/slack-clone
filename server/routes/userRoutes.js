@@ -5,7 +5,7 @@ const AWS = require('../utils/aws')
 const s3 = new AWS.S3()
 
 
-router.get('/', authenticate , (req,res)=>{
+router.get('/', (req,res)=>{
    setTimeout(() => {
         res.status(200).json({ success: true, data: req.user, status: 200 });
     }, 1000)
@@ -13,7 +13,7 @@ router.get('/', authenticate , (req,res)=>{
 
 
 
-router.get('/image/upload', authenticate , async (req,res)=>{
+router.get('/image/upload', async (req,res)=>{
         
         const contentType = req.query?.contentType || 'image/jpeg'
 

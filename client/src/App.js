@@ -4,6 +4,7 @@ import Landing from './components/Landing/Landing'
 import CreateWorkspace from './components/Landing/CreateWorkspace'
 import Dashboard from './components/Dashboard/Dashboard'
 import { UserDataProvider } from './context/UserDataContext'
+import WorkSpaceConfirmation from './components/Common/WorkSpaceConfirmation'
 
 import { createBrowserRouter, RouterProvider } from'react-router-dom'
 const router = createBrowserRouter([
@@ -21,10 +22,10 @@ const router = createBrowserRouter([
             path: 'create',
             element: <CreateWorkspace/>,
           },
-        //   {
-        //     path: 'confirm/',
-        //     element: <CreateWorkspace />,
-        //   },
+          {
+            path: 'confirm',
+            element: <WorkSpaceConfirmation/>,
+          },
         ],
       },
     {

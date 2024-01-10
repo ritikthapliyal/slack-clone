@@ -5,11 +5,12 @@ const DynamoDB = new AWS.DynamoDB.DocumentClient()
 const lambda = new AWS.Lambda()
 
 
-// router.get('/', authenticate , (req,res)=>{
-//    setTimeout(() => {
-//         res.status(200).json({ success: true, data: req.user, status: 200 });
-//     }, 5000)
-// })
+router.post('/confirm', (req, res) => {
+    const redirectUrl = req.session.returnTo 
+    delete req.session.returnTo
+    console.log(redirectUrl)
+    res.redirect(redirectUrl)
+})
 
 
 router.post('/', async (req,res)=>{
@@ -26,20 +27,20 @@ router.post('/', async (req,res)=>{
 
         try {
 
-            // const params = {
-            //     FunctionName: 'slack-clone-microservice',
-            //     InvocationType: 'Event', // or 'Event' for asynchronous invocation
-            //     Payload: JSON.stringify({
-            //         task : "send_email",
-            //         user_details : {
-            //             username : username || req.user.username,
-            //             workspace_name : new_workspace.workspace_name
-            //         },
-            //         invite_emails : new_workspace.invite_emails
-            //     })
-            // }
+            const params = {
+                FunctionName: 'slack-clone-microservice',
+                InvocationType: 'Event', // or 'Event' for asynchronous invocation
+                Payload: JSON.stringify({
+                    task : "send_email",
+                    user_details : {
+                        username : username || req.user.username,
+                        workspace_name : new_workspace.workspace_name
+                    },
+                    invite_emails
+                })
+            }
 
-            // await lambda.invoke(params).promise()
+            await lambda.invoke(params).promise()
 
             const update_params = {
                 TableName: 'Users',
